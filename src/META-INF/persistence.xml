@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="BolsaDerbyPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>bolsaderby.data.Categoria</class>
+    <class>bolsaderby.data.DatoValor</class>
+    <class>bolsaderby.data.FicheroTratado</class>
+    <class>bolsaderby.data.Indicador</class>
+    <class>bolsaderby.data.Operacion</class>
+    <class>bolsaderby.data.Valor</class>
+    <class>bolsaderby.data.PatronDatos</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby:Bolsa;create=true"/>
+      <property name="javax.persistence.jdbc.user" value=""/>
+      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+    </properties>
+  </persistence-unit>
+</persistence>
