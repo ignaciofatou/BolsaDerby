@@ -26,7 +26,7 @@ public class Categorias {
     
     public List<Categoria> findAll(EntityManager entityManager) {
         // Load data from database
-        Query query = entityManager.createNamedQuery("Categorias.findAll");
+        Query query = entityManager.createNamedQuery("Categoria.findAll");
         categoriaList = query.getResultList();
         return categoriaList;
     } 

@@ -26,7 +26,7 @@ public class Valores {
     
     public List<Valor> findAll(EntityManager entityManager) {
         // Load data from database
-        Query query = entityManager.createNamedQuery("Valores.findAll");
+        Query query = entityManager.createNamedQuery("Valor.findAll");
         valorList = query.getResultList();
         return valorList;
     } 

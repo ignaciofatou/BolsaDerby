@@ -26,7 +26,7 @@ public class DatosValor {
     
     public List<DatoValor> findAllDatosValor(EntityManager entityManager, String codValor) {
         // Load data from database
-        Query query = entityManager.createNamedQuery("DatosValores.findByCodValor");
+        Query query = entityManager.createNamedQuery("DatoValor.findByCodValor");
         query.setParameter("codValor", codValor);
         datoValorList = query.getResultList();
         return datoValorList;

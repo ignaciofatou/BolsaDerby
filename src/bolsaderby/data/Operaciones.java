@@ -26,14 +26,14 @@ public class Operaciones {
     
     public List<Operacion> findAll(EntityManager entityManager) {
         // Load data from database
-        Query query = entityManager.createNamedQuery("Operaciones.findAll");
+        Query query = entityManager.createNamedQuery("Operacion.findAll");
         operacionList = query.getResultList();
         return operacionList;
     }
     
     public List<Operacion> findAllValor(EntityManager entityManager, String codValor) {
         // Load data from database
-        Query query = entityManager.createNamedQuery("Operaciones.findByCodValor");
+        Query query = entityManager.createNamedQuery("Operacion.findByCodValor");
         query.setParameter("codValor", codValor);
         operacionList = query.getResultList();
         return operacionList;

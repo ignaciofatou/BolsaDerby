@@ -23,10 +23,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "INDICADORES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Indicadores.findAll", query = "SELECT i FROM Indicadores i"),
-    @NamedQuery(name = "Indicadores.findByNombre", query = "SELECT i FROM Indicadores i WHERE i.nombre = :nombre"),
-    @NamedQuery(name = "Indicadores.findByDescripcion", query = "SELECT i FROM Indicadores i WHERE i.descripcion = :descripcion"),
-    @NamedQuery(name = "Indicadores.findByFormula", query = "SELECT i FROM Indicadores i WHERE i.formula = :formula")})
+    @NamedQuery(name = "Indicador.findAll", query = "SELECT i FROM Indicadores i"),
+    @NamedQuery(name = "Indicador.findByNombre", query = "SELECT i FROM Indicadores i WHERE i.nombre = :nombre"),
+    @NamedQuery(name = "Indicador.findByDescripcion", query = "SELECT i FROM Indicadores i WHERE i.descripcion = :descripcion"),
+    @NamedQuery(name = "Indicador.findByFormula", query = "SELECT i FROM Indicadores i WHERE i.formula = :formula")})
 public class Indicador implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

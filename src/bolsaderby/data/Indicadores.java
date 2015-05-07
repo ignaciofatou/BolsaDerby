@@ -26,7 +26,7 @@ public class Indicadores {
     
     public List<Indicador> findAll(EntityManager entityManager) {
         // Load data from database
-        Query query = entityManager.createNamedQuery("Indicadores.findAll");
+        Query query = entityManager.createNamedQuery("Indicador.findAll");
         indicadorList = query.getResultList();
         return indicadorList;
     }

@@ -29,10 +29,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "VALORES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Valores.findAll", query = "SELECT v FROM Valores v"),
-    @NamedQuery(name = "Valores.findByCodValor", query = "SELECT v FROM Valores v WHERE v.codValor = :codValor"),
-    @NamedQuery(name = "Valores.findByDecimales", query = "SELECT v FROM Valores v WHERE v.decimales = :decimales"),
-    @NamedQuery(name = "Valores.findByDescripcion", query = "SELECT v FROM Valores v WHERE v.descripcion = :descripcion")})
+    @NamedQuery(name = "Valor.findAll", query = "SELECT v FROM Valores v"),
+    @NamedQuery(name = "Valor.findByCodValor", query = "SELECT v FROM Valores v WHERE v.codValor = :codValor"),
+    @NamedQuery(name = "Valor.findByDecimales", query = "SELECT v FROM Valores v WHERE v.decimales = :decimales"),
+    @NamedQuery(name = "Valor.findByDescripcion", query = "SELECT v FROM Valores v WHERE v.descripcion = :descripcion")})
 public class Valor implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

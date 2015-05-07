@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "FICHEROS_TRATADOS")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "FicherosTratados.findAll", query = "SELECT f FROM FICHEROS_TRATADOS f"),
-    @NamedQuery(name = "FicherosTratados.findByFichero", query = "SELECT f FROM FICHEROS_TRATADOS f WHERE f.fichero = :fichero"),
-    @NamedQuery(name = "FicherosTratados.findByNumReg", query = "SELECT f FROM FICHEROS_TRATADOS f WHERE f.numReg = :numReg"),
-    @NamedQuery(name = "FicherosTratados.findByFecha", query = "SELECT f FROM FICHEROS_TRATADOS f WHERE f.fecha = :fecha")})
+    @NamedQuery(name = "FicheroTratado.findAll", query = "SELECT f FROM FICHEROS_TRATADOS f"),
+    @NamedQuery(name = "FicheroTratado.findByFichero", query = "SELECT f FROM FICHEROS_TRATADOS f WHERE f.fichero = :fichero"),
+    @NamedQuery(name = "FicheroTratado.findByNumReg", query = "SELECT f FROM FICHEROS_TRATADOS f WHERE f.numReg = :numReg"),
+    @NamedQuery(name = "FicheroTratado.findByFecha", query = "SELECT f FROM FICHEROS_TRATADOS f WHERE f.fecha = :fecha")})
 public class FicheroTratado implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

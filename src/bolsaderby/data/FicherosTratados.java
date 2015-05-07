@@ -26,7 +26,7 @@ public class FicherosTratados {
     
     public List<FicheroTratado> findAll(EntityManager entityManager) {
         // Load data from database
-        Query query = entityManager.createNamedQuery("FicherosTratados.findAll");
+        Query query = entityManager.createNamedQuery("FicheroTratado.findAll");
         ficheroTratadoList = query.getResultList();
         return ficheroTratadoList;
     }

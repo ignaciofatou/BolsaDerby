@@ -27,9 +27,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "DATOS_VALORES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "DatosValores.findAll", query = "SELECT d FROM DatosValores d"),
-    @NamedQuery(name = "DatosValores.findByCodValor", query = "SELECT d FROM DatosValores d WHERE d.datosValoresPK.codValor = :codValor"),
-    @NamedQuery(name = "DatosValores.findByCodValorFecha", query = "SELECT d FROM DatosValores d WHERE d.datosValoresPK.codValor = :codValor AND d.datosValoresPK.fecha = :fecha")})
+    @NamedQuery(name = "DatoValor.findAll", query = "SELECT d FROM DatosValores d"),
+    @NamedQuery(name = "DatoValor.findByCodValor", query = "SELECT d FROM DatosValores d WHERE d.datosValoresPK.codValor = :codValor"),
+    @NamedQuery(name = "DatoValor.findByCodValorFecha", query = "SELECT d FROM DatosValores d WHERE d.datosValoresPK.codValor = :codValor AND d.datosValoresPK.fecha = :fecha")})
 public class DatoValor implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId

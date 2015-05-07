@@ -27,13 +27,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "CATEGORIAS")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Categorias.findAll", query = "SELECT c FROM Categorias c"),
-    @NamedQuery(name = "Categorias.findByCodCat", query = "SELECT c FROM Categorias c WHERE c.codCat = :codCat"),
-    @NamedQuery(name = "Categorias.findByDescripcion", query = "SELECT c FROM Categorias c WHERE c.descripcion = :descripcion"),
-    @NamedQuery(name = "Categorias.findByUrl", query = "SELECT c FROM Categorias c WHERE c.url = :url"),
-    @NamedQuery(name = "Categorias.findByFormatofecha", query = "SELECT c FROM Categorias c WHERE c.formatofecha = :formatofecha"),
-    @NamedQuery(name = "Categorias.findByComodin", query = "SELECT c FROM Categorias c WHERE c.comodin = :comodin"),
-    @NamedQuery(name = "Categorias.findByExtension", query = "SELECT c FROM Categorias c WHERE c.extension = :extension")})
+    @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categorias c"),
+    @NamedQuery(name = "Categoria.findByCodCat", query = "SELECT c FROM Categorias c WHERE c.codCat = :codCat"),
+    @NamedQuery(name = "Categoria.findByDescripcion", query = "SELECT c FROM Categorias c WHERE c.descripcion = :descripcion"),
+    @NamedQuery(name = "Categoria.findByUrl", query = "SELECT c FROM Categorias c WHERE c.url = :url"),
+    @NamedQuery(name = "Categoria.findByFormatofecha", query = "SELECT c FROM Categorias c WHERE c.formatofecha = :formatofecha"),
+    @NamedQuery(name = "Categoria.findByComodin", query = "SELECT c FROM Categorias c WHERE c.comodin = :comodin"),
+    @NamedQuery(name = "Categoria.findByExtension", query = "SELECT c FROM Categorias c WHERE c.extension = :extension")})
 public class Categoria implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

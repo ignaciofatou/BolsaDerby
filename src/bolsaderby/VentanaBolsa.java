@@ -36,10 +36,10 @@ public class VentanaBolsa extends javax.swing.JFrame {
     
     private void cargaBoxCategoria(){
         //Recuperamos todas las Categorias
-        categorias.findAll(entityManager);
+        //categorias.findAll(entityManager);
         
         //Cargamos el Combo de Categorias
-        jComboBoxCategorias.setModel(new DefaultComboBoxModel(categorias.getCategoriaList().toArray()));
+        //jComboBoxCategorias.setModel(new DefaultComboBoxModel(categorias.getCategoriaList().toArray()));
 
     }
 
