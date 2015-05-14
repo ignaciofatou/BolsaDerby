@@ -29,17 +29,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "OPERACIONES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Operacion.findAll", query = "SELECT o FROM Operaciones o"),
-    @NamedQuery(name = "Operacion.findById", query = "SELECT o FROM Operaciones o WHERE o.id = :id"),
-    @NamedQuery(name = "Operacion.findByCodValor", query = "SELECT o FROM Operaciones o WHERE o.codValor = :codValor"),
-    @NamedQuery(name = "Operacion.findByVolumen", query = "SELECT o FROM Operaciones o WHERE o.volumen = :volumen"),
-    @NamedQuery(name = "Operacion.findByDesOperacion", query = "SELECT o FROM Operaciones o WHERE o.desOperacion = :desOperacion"),
-    @NamedQuery(name = "Operacion.findByFechApertura", query = "SELECT o FROM Operaciones o WHERE o.fechApertura = :fechApertura"),
-    @NamedQuery(name = "Operacion.findByPrecApertura", query = "SELECT o FROM Operaciones o WHERE o.precApertura = :precApertura"),
-    @NamedQuery(name = "Operacion.findByFechCierre", query = "SELECT o FROM Operaciones o WHERE o.fechCierre = :fechCierre"),
-    @NamedQuery(name = "Operacion.findByPrecCierre", query = "SELECT o FROM Operaciones o WHERE o.precCierre = :precCierre"),
-    @NamedQuery(name = "Operacion.findByTasas", query = "SELECT o FROM Operaciones o WHERE o.tasas = :tasas"),
-    @NamedQuery(name = "Operacion.findByBeneficio", query = "SELECT o FROM Operaciones o WHERE o.beneficio = :beneficio")})
+    @NamedQuery(name = "Operacion.findAll", query = "SELECT o FROM Operacion o"),
+    @NamedQuery(name = "Operacion.findById", query = "SELECT o FROM Operacion o WHERE o.id = :id"),
+    @NamedQuery(name = "Operacion.findByCodValor", query = "SELECT o FROM Operacion o WHERE o.codValor = :codValor"),
+    @NamedQuery(name = "Operacion.findByVolumen", query = "SELECT o FROM Operacion o WHERE o.volumen = :volumen"),
+    @NamedQuery(name = "Operacion.findByDesOperacion", query = "SELECT o FROM Operacion o WHERE o.desOperacion = :desOperacion"),
+    @NamedQuery(name = "Operacion.findByFechApertura", query = "SELECT o FROM Operacion o WHERE o.fechApertura = :fechApertura"),
+    @NamedQuery(name = "Operacion.findByPrecApertura", query = "SELECT o FROM Operacion o WHERE o.precApertura = :precApertura"),
+    @NamedQuery(name = "Operacion.findByFechCierre", query = "SELECT o FROM Operacion o WHERE o.fechCierre = :fechCierre"),
+    @NamedQuery(name = "Operacion.findByPrecCierre", query = "SELECT o FROM Operacion o WHERE o.precCierre = :precCierre"),
+    @NamedQuery(name = "Operacion.findByTasas", query = "SELECT o FROM Operacion o WHERE o.tasas = :tasas"),
+    @NamedQuery(name = "Operacion.findByBeneficio", query = "SELECT o FROM Operacion o WHERE o.beneficio = :beneficio")})
 public class Operacion implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -192,7 +192,7 @@ public class Operacion implements Serializable {
 
     @Override
     public String toString() {
-        return "bolsaderby.data.Operaciones[ id=" + id + " ]";
+        return "bolsaderby.resources.Operacion[ id=" + id + " ]";
     }
     
 }

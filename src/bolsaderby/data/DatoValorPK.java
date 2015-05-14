@@ -77,7 +77,7 @@ public class DatoValorPK implements Serializable {
 
     @Override
     public String toString() {
-        return "bolsaderby.data.DatosValoresPK[ codValor=" + codValor + ", fecha=" + fecha + " ]";
+        return "bolsaderby.resources.DatoValorPK[ codValor=" + codValor + ", fecha=" + fecha + " ]";
     }
     
 }

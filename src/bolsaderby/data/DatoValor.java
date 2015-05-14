@@ -27,13 +27,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "DATOS_VALORES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "DatoValor.findAll", query = "SELECT d FROM DatosValores d"),
-    @NamedQuery(name = "DatoValor.findByCodValor", query = "SELECT d FROM DatosValores d WHERE d.datosValoresPK.codValor = :codValor"),
-    @NamedQuery(name = "DatoValor.findByCodValorFecha", query = "SELECT d FROM DatosValores d WHERE d.datosValoresPK.codValor = :codValor AND d.datosValoresPK.fecha = :fecha")})
+    @NamedQuery(name = "DatoValor.findAll", query = "SELECT d FROM DatoValor d"),
+    @NamedQuery(name = "DatoValor.findByCodValor", query = "SELECT d FROM DatoValor d WHERE d.datoValorPK.codValor = :codValor"),
+    @NamedQuery(name = "DatoValor.findByFecha", query = "SELECT d FROM DatoValor d WHERE d.datoValorPK.fecha = :fecha"),
+    @NamedQuery(name = "DatoValor.findByApertura", query = "SELECT d FROM DatoValor d WHERE d.apertura = :apertura"),
+    @NamedQuery(name = "DatoValor.findByMaximo", query = "SELECT d FROM DatoValor d WHERE d.maximo = :maximo"),
+    @NamedQuery(name = "DatoValor.findByMinimo", query = "SELECT d FROM DatoValor d WHERE d.minimo = :minimo"),
+    @NamedQuery(name = "DatoValor.findByCierre", query = "SELECT d FROM DatoValor d WHERE d.cierre = :cierre"),
+    @NamedQuery(name = "DatoValor.findByVolumen", query = "SELECT d FROM DatoValor d WHERE d.volumen = :volumen")})
 public class DatoValor implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
-    protected DatoValorPK datosValoresPK;
+    protected DatoValorPK datoValorPK;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @Column(name = "APERTURA")
@@ -51,17 +56,17 @@ public class DatoValor implements Serializable {
     private long volumen;
     @JoinColumn(name = "COD_VALOR", referencedColumnName = "COD_VALOR", insertable = false, updatable = false)
     @ManyToOne(optional = false)
-    private Valor valores;
+    private Valor valor;
 
     public DatoValor() {
     }
 
-    public DatoValor(DatoValorPK datosValoresPK) {
-        this.datosValoresPK = datosValoresPK;
+    public DatoValor(DatoValorPK datoValorPK) {
+        this.datoValorPK = datoValorPK;
     }
 
-    public DatoValor(DatoValorPK datosValoresPK, BigDecimal apertura, BigDecimal maximo, BigDecimal minimo, long volumen) {
-        this.datosValoresPK = datosValoresPK;
+    public DatoValor(DatoValorPK datoValorPK, BigDecimal apertura, BigDecimal maximo, BigDecimal minimo, long volumen) {
+        this.datoValorPK = datoValorPK;
         this.apertura = apertura;
         this.maximo = maximo;
         this.minimo = minimo;
@@ -69,15 +74,15 @@ public class DatoValor implements Serializable {
     }
 
     public DatoValor(String codValor, Date fecha) {
-        this.datosValoresPK = new DatoValorPK(codValor, fecha);
+        this.datoValorPK = new DatoValorPK(codValor, fecha);
     }
 
-    public DatoValorPK getDatosValoresPK() {
-        return datosValoresPK;
+    public DatoValorPK getDatoValorPK() {
+        return datoValorPK;
     }
 
-    public void setDatosValoresPK(DatoValorPK datosValoresPK) {
-        this.datosValoresPK = datosValoresPK;
+    public void setDatoValorPK(DatoValorPK datoValorPK) {
+        this.datoValorPK = datoValorPK;
     }
 
     public BigDecimal getApertura() {
@@ -120,18 +125,18 @@ public class DatoValor implements Serializable {
         this.volumen = volumen;
     }
 
-    public Valor getValores() {
-        return valores;
+    public Valor getValor() {
+        return valor;
     }
 
-    public void setValores(Valor valores) {
-        this.valores = valores;
+    public void setValor(Valor valor) {
+        this.valor = valor;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (datosValoresPK != null ? datosValoresPK.hashCode() : 0);
+        hash += (datoValorPK != null ? datoValorPK.hashCode() : 0);
         return hash;
     }
 
@@ -142,7 +147,7 @@ public class DatoValor implements Serializable {
             return false;
         }
         DatoValor other = (DatoValor) object;
-        if ((this.datosValoresPK == null && other.datosValoresPK != null) || (this.datosValoresPK != null && !this.datosValoresPK.equals(other.datosValoresPK))) {
+        if ((this.datoValorPK == null && other.datoValorPK != null) || (this.datoValorPK != null && !this.datoValorPK.equals(other.datoValorPK))) {
             return false;
         }
         return true;
@@ -150,7 +155,7 @@ public class DatoValor implements Serializable {
 
     @Override
     public String toString() {
-        return "bolsaderby.data.DatosValores[ datosValoresPK=" + datosValoresPK + " ]";
+        return "bolsaderby.resources.DatoValor[ datoValorPK=" + datoValorPK + " ]";
     }
     
 }

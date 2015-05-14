@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "FICHEROS_TRATADOS")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "FicheroTratado.findAll", query = "SELECT f FROM FICHEROS_TRATADOS f"),
-    @NamedQuery(name = "FicheroTratado.findByFichero", query = "SELECT f FROM FICHEROS_TRATADOS f WHERE f.fichero = :fichero"),
-    @NamedQuery(name = "FicheroTratado.findByNumReg", query = "SELECT f FROM FICHEROS_TRATADOS f WHERE f.numReg = :numReg"),
-    @NamedQuery(name = "FicheroTratado.findByFecha", query = "SELECT f FROM FICHEROS_TRATADOS f WHERE f.fecha = :fecha")})
+    @NamedQuery(name = "FicheroTratado.findAll", query = "SELECT f FROM FicheroTratado f"),
+    @NamedQuery(name = "FicheroTratado.findByFichero", query = "SELECT f FROM FicheroTratado f WHERE f.fichero = :fichero"),
+    @NamedQuery(name = "FicheroTratado.findByNumReg", query = "SELECT f FROM FicheroTratado f WHERE f.numReg = :numReg"),
+    @NamedQuery(name = "FicheroTratado.findByFecha", query = "SELECT f FROM FicheroTratado f WHERE f.fecha = :fecha")})
 public class FicheroTratado implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -101,7 +101,7 @@ public class FicheroTratado implements Serializable {
 
     @Override
     public String toString() {
-        return "bolsaderby.data.FicherosTratados[ fichero=" + fichero + " ]";
+        return "bolsaderby.resources.FicheroTratado[ fichero=" + fichero + " ]";
     }
     
 }

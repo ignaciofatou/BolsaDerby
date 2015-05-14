@@ -29,10 +29,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "VALORES")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Valor.findAll", query = "SELECT v FROM Valores v"),
-    @NamedQuery(name = "Valor.findByCodValor", query = "SELECT v FROM Valores v WHERE v.codValor = :codValor"),
-    @NamedQuery(name = "Valor.findByDecimales", query = "SELECT v FROM Valores v WHERE v.decimales = :decimales"),
-    @NamedQuery(name = "Valor.findByDescripcion", query = "SELECT v FROM Valores v WHERE v.descripcion = :descripcion")})
+    @NamedQuery(name = "Valor.findAll", query = "SELECT v FROM Valor v"),
+    @NamedQuery(name = "Valor.findByCodValor", query = "SELECT v FROM Valor v WHERE v.codValor = :codValor"),
+    @NamedQuery(name = "Valor.findByDecimales", query = "SELECT v FROM Valor v WHERE v.decimales = :decimales"),
+    @NamedQuery(name = "Valor.findByDescripcion", query = "SELECT v FROM Valor v WHERE v.descripcion = :descripcion")})
 public class Valor implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,8 +48,8 @@ public class Valor implements Serializable {
     @JoinColumn(name = "COD_CAT", referencedColumnName = "COD_CAT")
     @ManyToOne(optional = false)
     private Categoria codCat;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "valores")
-    private Collection<DatoValor> datosValoresCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "valor")
+    private Collection<DatoValor> datoValorCollection;
 
     public Valor() {
     }
@@ -97,12 +97,12 @@ public class Valor implements Serializable {
     }
 
     @XmlTransient
-    public Collection<DatoValor> getDatosValoresCollection() {
-        return datosValoresCollection;
+    public Collection<DatoValor> getDatoValorCollection() {
+        return datoValorCollection;
     }
 
-    public void setDatosValoresCollection(Collection<DatoValor> datosValoresCollection) {
-        this.datosValoresCollection = datosValoresCollection;
+    public void setDatoValorCollection(Collection<DatoValor> datoValorCollection) {
+        this.datoValorCollection = datoValorCollection;
     }
 
     @Override
@@ -127,7 +127,7 @@ public class Valor implements Serializable {
 
     @Override
     public String toString() {
-        return "bolsaderby.data.Valores[ codValor=" + codValor + " ]";
+        return "bolsaderby.resources.Valor[ codValor=" + codValor + " ]";
     }
     
 }

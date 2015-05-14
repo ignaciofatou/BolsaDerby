@@ -23,11 +23,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "PATRON_DATOS")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PatronDatos.findAll", query = "SELECT p FROM PatronDatos p"),
-    @NamedQuery(name = "PatronDatos.findByCodCampo", query = "SELECT p FROM PatronDatos p WHERE p.codCampo = :codCampo"),
-    @NamedQuery(name = "PatronDatos.findByOrden", query = "SELECT p FROM PatronDatos p WHERE p.orden = :orden"),
-    @NamedQuery(name = "PatronDatos.findByTipoDato", query = "SELECT p FROM PatronDatos p WHERE p.tipoDato = :tipoDato")})
-public class PatronDatos implements Serializable {
+    @NamedQuery(name = "PatronDato.findAll", query = "SELECT p FROM PatronDato p"),
+    @NamedQuery(name = "PatronDato.findByCodCampo", query = "SELECT p FROM PatronDato p WHERE p.codCampo = :codCampo"),
+    @NamedQuery(name = "PatronDato.findByOrden", query = "SELECT p FROM PatronDato p WHERE p.orden = :orden"),
+    @NamedQuery(name = "PatronDato.findByTipoDato", query = "SELECT p FROM PatronDato p WHERE p.tipoDato = :tipoDato")})
+public class PatronDato implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -40,14 +40,14 @@ public class PatronDatos implements Serializable {
     @Column(name = "TIPO_DATO")
     private String tipoDato;
 
-    public PatronDatos() {
+    public PatronDato() {
     }
 
-    public PatronDatos(String codCampo) {
+    public PatronDato(String codCampo) {
         this.codCampo = codCampo;
     }
 
-    public PatronDatos(String codCampo, int orden, String tipoDato) {
+    public PatronDato(String codCampo, int orden, String tipoDato) {
         this.codCampo = codCampo;
         this.orden = orden;
         this.tipoDato = tipoDato;
@@ -87,10 +87,10 @@ public class PatronDatos implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PatronDatos)) {
+        if (!(object instanceof PatronDato)) {
             return false;
         }
-        PatronDatos other = (PatronDatos) object;
+        PatronDato other = (PatronDato) object;
         if ((this.codCampo == null && other.codCampo != null) || (this.codCampo != null && !this.codCampo.equals(other.codCampo))) {
             return false;
         }
@@ -99,7 +99,7 @@ public class PatronDatos implements Serializable {
 
     @Override
     public String toString() {
-        return "bolsaderby.data.PatronDatos[ codCampo=" + codCampo + " ]";
+        return "bolsaderby.resources.PatronDato[ codCampo=" + codCampo + " ]";
     }
     
 }

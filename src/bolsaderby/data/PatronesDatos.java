@@ -14,17 +14,17 @@ import javax.persistence.Query;
  * @author Ignacio
  */
 public class PatronesDatos {
-    private List<PatronDatos> patronDatosList;
+    private List<PatronDato> patronDatosList;
 
-    public List<PatronDatos> getPatronDatosList() {
+    public List<PatronDato> getPatronDatosList() {
         return patronDatosList;
     }            
 
-    public void setPatronDatosList(List<PatronDatos> patronDatosList) {
+    public void setPatronDatosList(List<PatronDato> patronDatosList) {
         this.patronDatosList = patronDatosList;
     }
     
-    public List<PatronDatos> findAll(EntityManager entityManager) {
+    public List<PatronDato> findAll(EntityManager entityManager) {
         // Load data from database
         Query query = entityManager.createNamedQuery("PatronDatos.findAll");
         patronDatosList = query.getResultList();

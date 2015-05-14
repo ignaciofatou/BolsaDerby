@@ -27,13 +27,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "CATEGORIAS")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categorias c"),
-    @NamedQuery(name = "Categoria.findByCodCat", query = "SELECT c FROM Categorias c WHERE c.codCat = :codCat"),
-    @NamedQuery(name = "Categoria.findByDescripcion", query = "SELECT c FROM Categorias c WHERE c.descripcion = :descripcion"),
-    @NamedQuery(name = "Categoria.findByUrl", query = "SELECT c FROM Categorias c WHERE c.url = :url"),
-    @NamedQuery(name = "Categoria.findByFormatofecha", query = "SELECT c FROM Categorias c WHERE c.formatofecha = :formatofecha"),
-    @NamedQuery(name = "Categoria.findByComodin", query = "SELECT c FROM Categorias c WHERE c.comodin = :comodin"),
-    @NamedQuery(name = "Categoria.findByExtension", query = "SELECT c FROM Categorias c WHERE c.extension = :extension")})
+    @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categoria c"),
+    @NamedQuery(name = "Categoria.findByCodCat", query = "SELECT c FROM Categoria c WHERE c.codCat = :codCat"),
+    @NamedQuery(name = "Categoria.findByDescripcion", query = "SELECT c FROM Categoria c WHERE c.descripcion = :descripcion"),
+    @NamedQuery(name = "Categoria.findByUrl", query = "SELECT c FROM Categoria c WHERE c.url = :url"),
+    @NamedQuery(name = "Categoria.findByFormatofecha", query = "SELECT c FROM Categoria c WHERE c.formatofecha = :formatofecha"),
+    @NamedQuery(name = "Categoria.findByComodin", query = "SELECT c FROM Categoria c WHERE c.comodin = :comodin"),
+    @NamedQuery(name = "Categoria.findByExtension", query = "SELECT c FROM Categoria c WHERE c.extension = :extension")})
 public class Categoria implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -54,7 +54,7 @@ public class Categoria implements Serializable {
     @Column(name = "EXTENSION")
     private String extension;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codCat")
-    private Collection<Valor> valoresCollection;
+    private Collection<Valor> valorCollection;
 
     public Categoria() {
     }
@@ -119,12 +119,12 @@ public class Categoria implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Valor> getValoresCollection() {
-        return valoresCollection;
+    public Collection<Valor> getValorCollection() {
+        return valorCollection;
     }
 
-    public void setValoresCollection(Collection<Valor> valoresCollection) {
-        this.valoresCollection = valoresCollection;
+    public void setValorCollection(Collection<Valor> valorCollection) {
+        this.valorCollection = valorCollection;
     }
 
     @Override
@@ -149,7 +149,7 @@ public class Categoria implements Serializable {
 
     @Override
     public String toString() {
-        return "bolsaderby.data.Categorias[ codCat=" + codCat + " ]";
+        return "bolsaderby.resources.Categoria[ codCat=" + codCat + " ]";
     }
     
 }

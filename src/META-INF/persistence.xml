@@ -3,12 +3,12 @@
   <persistence-unit name="BolsaDerbyPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>bolsaderby.data.Categoria</class>
-    <class>bolsaderby.data.DatoValor</class>
+    <class>bolsaderby.data.Operacion</class>
+    <class>bolsaderby.data.PatronDato</class>
     <class>bolsaderby.data.FicheroTratado</class>
     <class>bolsaderby.data.Indicador</class>
-    <class>bolsaderby.data.Operacion</class>
+    <class>bolsaderby.data.DatoValor</class>
     <class>bolsaderby.data.Valor</class>
-    <class>bolsaderby.data.PatronDatos</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby:Bolsa;create=true"/>
       <property name="javax.persistence.jdbc.user" value=""/>

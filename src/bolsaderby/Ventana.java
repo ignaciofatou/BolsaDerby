@@ -5,42 +5,51 @@
  */
 package bolsaderby;
 
-import bolsaderby.data.Categorias;
 import bolsaderby.data.Categoria;
+import bolsaderby.data.Categorias;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.swing.DefaultComboBoxModel;
 
 /**
  *
  * @author Ignacio
  */
-public class VentanaBolsa extends javax.swing.JFrame {
+public class Ventana extends javax.swing.JFrame {
 
-    //Conectamos con la Base de Datos
-    private final EntityManager entityManager = Persistence.createEntityManagerFactory("BolsaDerbyPU").createEntityManager();
-    private Categorias categorias = new Categorias();
-    private Categoria categoria;
+    // Connection with database using an entity manager
+    EntityManager entityManager = Persistence.createEntityManagerFactory("BolsaDerbyPU").createEntityManager();
+    Categorias categorias = new Categorias();
     
-    
-    public VentanaBolsa() {
+    /**
+     * Creates new form Ventana
+     */
+    public Ventana() {
         initComponents();
         
-        //Centramos la Ventana
+        //Ponemos el Layout (Diseño) a Nulo
+        this.setLayout(null);
+        
+        //Centramos la ventana
         setLocationRelativeTo(null);
         
-        //Cargamos el Combo de Categorias
-        cargaBoxCategoria();
+        //Cargamos las Categorias en el ComboBox
+        cargaCategorias();
+    }
+
+    private void cargaCategorias(){
+        List<Categoria> categoriaList = categorias.findAll(entityManager);
+
+        //Cargamos el ComboBox a Partir de las Descripciones de las Categorias
+        for (Categoria categoria:categoriaList){
+            jCBCategorias.addItem(categoria.getDescripcion());
+        }
     }
     
-    private void cargaBoxCategoria(){
-        //Recuperamos todas las Categorias
-        //categorias.findAll(entityManager);
-        
-        //Cargamos el Combo de Categorias
-        //jComboBoxCategorias.setModel(new DefaultComboBoxModel(categorias.getCategoriaList().toArray()));
-
+    private void reiniciaCombo(javax.swing.JComboBox combo){
+        DefaultComboBoxModel modelo = new DefaultComboBoxModel();
+        combo.setModel(modelo);
     }
 
     /**
@@ -52,12 +61,15 @@ public class VentanaBolsa extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBoxCategorias = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
+        jCBCategorias = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jComboBoxCategorias.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setText("Categoria:");
 
@@ -68,22 +80,27 @@ public class VentanaBolsa extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBoxCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(202, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCBCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(316, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBoxCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addContainerGap(269, Short.MAX_VALUE))
+                    .addComponent(jLabel1)
+                    .addComponent(jCBCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(354, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        //Cerramos la Conexion
+        entityManager.close();
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -102,26 +119,26 @@ public class VentanaBolsa extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VentanaBolsa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Ventana.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VentanaBolsa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Ventana.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VentanaBolsa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Ventana.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VentanaBolsa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Ventana.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VentanaBolsa().setVisible(true);
+                new Ventana().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox jComboBoxCategorias;
+    private javax.swing.JComboBox jCBCategorias;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
