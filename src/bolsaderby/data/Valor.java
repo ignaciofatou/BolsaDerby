@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Valor.findAll", query = "SELECT v FROM Valor v"),
-    //@NamedQuery(name = "Valor.findByCodCat", query = "SELECT v FROM Valor v WHERE v.codCat = :codCat"),
     @NamedQuery(name = "Valor.findByCodValor", query = "SELECT v FROM Valor v WHERE v.codValor = :codValor"),
     @NamedQuery(name = "Valor.findByDecimales", query = "SELECT v FROM Valor v WHERE v.decimales = :decimales"),
     @NamedQuery(name = "Valor.findByDescripcion", query = "SELECT v FROM Valor v WHERE v.descripcion = :descripcion")})
@@ -49,7 +48,6 @@ public class Valor implements Serializable {
     @JoinColumn(name = "COD_CAT", referencedColumnName = "COD_CAT")
     @ManyToOne(optional = false)
     private Categoria codCat;
-    //private String codCat;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "valor")
     private Collection<DatoValor> datoValorCollection;
 
