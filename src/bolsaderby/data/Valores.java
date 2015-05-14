@@ -30,4 +30,10 @@ public class Valores {
         valorList = query.getResultList();
         return valorList;
     } 
+    public List<Valor> findByCodCat(EntityManager entityManager, ) {
+        // Load data from database
+        Query query = entityManager.createNamedQuery("Valor.findAll");
+        valorList = query.getResultList();
+        return valorList;
+    } 
 }

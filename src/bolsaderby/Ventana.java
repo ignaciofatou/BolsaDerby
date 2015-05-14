@@ -7,6 +7,8 @@ package bolsaderby;
 
 import bolsaderby.data.Categoria;
 import bolsaderby.data.Categorias;
+import bolsaderby.data.Valor;
+import bolsaderby.data.Valores;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -20,7 +22,8 @@ public class Ventana extends javax.swing.JFrame {
 
     // Connection with database using an entity manager
     EntityManager entityManager = Persistence.createEntityManagerFactory("BolsaDerbyPU").createEntityManager();
-    Categorias categorias = new Categorias();
+    Categorias    categorias = new Categorias();
+    Valores       valores    = new Valores();
     
     /**
      * Creates new form Ventana
@@ -41,10 +44,31 @@ public class Ventana extends javax.swing.JFrame {
     private void cargaCategorias(){
         List<Categoria> categoriaList = categorias.findAll(entityManager);
 
+        //Reiniciamos el Combo si ya tiene algun contenido
+        if (jCBCategorias.getItemCount() != 0)
+            reiniciaCombo(jCBCategorias);
+        
         //Cargamos el ComboBox a Partir de las Descripciones de las Categorias
         for (Categoria categoria:categoriaList){
             jCBCategorias.addItem(categoria.getDescripcion());
         }
+        //Marcamos por defecto el Primero Item como Seleccionado
+        jCBCategorias.setSelectedIndex(0);
+    }
+    
+    private void cargaValores(){
+        List<Valor> valorList = valores.findAll(entityManager);
+        
+        //Reiniciamos el Combo si ya tiene algun contenido
+        if (jCBValores.getItemCount() != 0)
+            reiniciaCombo(jCBValores);
+        
+        //Cargamos el ComboBox a Partir de las Descripciones de las Categorias
+        for (Valor valor:valorList){
+            jCBValores.addItem(valor.getDescripcion());
+        }
+        //Marcamos por defecto el Primero Item como Seleccionado
+        jCBValores.setSelectedIndex(0);
     }
     
     private void reiniciaCombo(javax.swing.JComboBox combo){
@@ -63,6 +87,8 @@ public class Ventana extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jCBCategorias = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
+        jCBValores = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -73,6 +99,14 @@ public class Ventana extends javax.swing.JFrame {
 
         jLabel1.setText("Categoria:");
 
+        jCBCategorias.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCBCategoriasItemStateChanged(evt);
+            }
+        });
+
+        jLabel2.setText("Valores:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -82,7 +116,11 @@ public class Ventana extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCBCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(316, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCBValores, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -90,7 +128,9 @@ public class Ventana extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jCBCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jCBCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jCBValores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(354, Short.MAX_VALUE))
         );
 
@@ -101,6 +141,14 @@ public class Ventana extends javax.swing.JFrame {
         //Cerramos la Conexion
         entityManager.close();
     }//GEN-LAST:event_formWindowClosing
+
+    private void jCBCategoriasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBCategoriasItemStateChanged
+        //Una vez Desmarcado el Valor Seleccionado
+        if (evt.getStateChange() == java.awt.event.ItemEvent.DESELECTED){
+            //Cargamos los Valores Asociados a la Categoria Seleccionada
+            cargaValores();
+        }
+    }//GEN-LAST:event_jCBCategoriasItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -139,6 +187,8 @@ public class Ventana extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox jCBCategorias;
+    private javax.swing.JComboBox jCBValores;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
