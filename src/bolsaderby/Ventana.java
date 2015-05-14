@@ -7,12 +7,19 @@ package bolsaderby;
 
 import bolsaderby.data.Categoria;
 import bolsaderby.data.Categorias;
+import bolsaderby.data.DatoValor;
+import bolsaderby.data.DatosValor;
 import bolsaderby.data.Valor;
+import bolsaderby.model.DatosValorTableModel;
+import bolsaderby.resources.BolsaValues;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -21,27 +28,67 @@ import javax.swing.DefaultComboBoxModel;
 public class Ventana extends javax.swing.JFrame {
 
     // Connection with database using an entity manager
-    EntityManager entityManager = Persistence.createEntityManagerFactory("BolsaDerbyPU").createEntityManager();
-    Categorias  categorias;
-    List<Valor> valores;
-    Valor       valor;
+    EntityManager   entityManager = Persistence.createEntityManagerFactory("BolsaDerbyPU").createEntityManager();
+    Categorias      categorias;
+    List<Valor>     valores;
+    Valor           valor;
+    DatosValor      datosValor;          
+    
+    private DatosValorTableModel datosValorTableModel;
+    private DatoValor            datoValorSelected;
     
     /**
      * Creates new form Ventana
      */
     public Ventana() {
+        //Inicializa los Componentes de la Ventana
         initComponents();
         
         //Ponemos el Layout (Diseño) a Nulo
         this.setLayout(null);
+        
+        // Save default background color to be used en jTableDatosValor
+        BolsaValues.defaultBackgroundColor = jTableDatosValor.getSelectionBackground();
         
         //Centramos la ventana
         setLocationRelativeTo(null);
         
         //Cargamos las Categorias en el ComboBox
         cargaCategorias();
+        
+        //Inicializamos el JTable de Datos del Valor
+        initJTableDatosValor();
     }
     
+    // Set configuration and data content for students jTable
+    private void initJTableDatosValor() {
+        // Model for JTable, assigning classgroups content
+        datosValorTableModel = new DatosValorTableModel(datosValor);
+        jTableDatosValor.setModel(datosValorTableModel);  
+
+        // Allow only one row selected
+        jTableDatosValor.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        // Listen for student selection in jtable
+        jTableDatosValor.getSelectionModel().addListSelectionListener(
+            new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent event) {
+                    int indexSelectedRow = jTableDatosValor.getSelectedRow();
+                    if(indexSelectedRow >= 0) {
+                        datoValorSelected = datosValor.getDatoValorList().get(indexSelectedRow);
+                        //showDetailStudentSelected();
+                    } else {
+                        //jTextFieldName.setText("");
+                        //jTextFieldSurnames.setText("");
+                        //jTextFieldGrade.setText("");
+                    }
+                }
+            }
+        );
+        
+        //enableEditingStudentDetail(false);
+    }
 
     //Solo se deben Cargar las Categorias al Iniciar el Programa
     private void cargaCategorias(){
@@ -61,13 +108,13 @@ public class Ventana extends javax.swing.JFrame {
         jCBCategorias.setSelectedIndex(0);
         
         //Carga los Valores de la Categoria Seleccionada por defecto
-        cargaValoresCategoria(0);
+        cargaValoresCategoria();
     }
     
     //Carga todos los Valores de la Categoria Seleccionada
-    private void cargaValoresCategoria(int posIndCat){
+    private void cargaValoresCategoria(){
         //Recuperamos los Valores de la Categoria Seleccionada
-        valores = getValoresCategoria(posIndCat);
+        valores = getValoresCategoria();
         
         //Reiniciamos el Combo si ya tiene algun contenido
         if (jCBValores.getItemCount() != 0)
@@ -79,6 +126,26 @@ public class Ventana extends javax.swing.JFrame {
         }
         //Marcamos por defecto el Primero Item como Seleccionado
         jCBValores.setSelectedIndex(0);
+        
+        //Carga los Datos del Valor Seleccionado por defecto
+        cargaDatosValor();
+    }
+
+    //Carga los Datos del Valor Seleccionado
+    private void cargaDatosValor(){        
+        //Recuperamos los Datos del Valor Seleccionado
+        datosValor = getDatosValor();
+
+        //Reiniciamos el JTable si este ya tiene algun contenido
+        //if (jCBValores.getItemCount() != 0)
+        //    reiniciaCombo(jCBValores);
+        
+        //Cargamos el ComboBox a Partir de las Descripciones de las Categorias
+        //for (Valor valor:valores){
+        //    jCBValores.addItem(valor.getDescripcion());
+        //}
+        //Marcamos por defecto el Primero Item como Seleccionado
+        //jCBValores.setSelectedIndex(0);
     }
     
     //Reinicia el Modelo del Combo
@@ -103,7 +170,7 @@ public class Ventana extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableDatosValor = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -129,7 +196,7 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableDatosValor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -140,7 +207,7 @@ public class Ventana extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableDatosValor);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -148,7 +215,7 @@ public class Ventana extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 167, Short.MAX_VALUE)
+            .addGap(0, 225, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,9 +228,9 @@ public class Ventana extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -185,7 +252,7 @@ public class Ventana extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -223,27 +290,59 @@ public class Ventana extends javax.swing.JFrame {
         //Una vez Desmarcado el Valor Seleccionado
         if (evt.getStateChange() == java.awt.event.ItemEvent.DESELECTED){
             //Cargamos los Valores Asociados a la Categoria Seleccionada
-            cargaValoresCategoria(jCBCategorias.getSelectedIndex());
+            cargaValoresCategoria();
         }
     }//GEN-LAST:event_jCBCategoriasItemStateChanged
 
     private void jCBValoresItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBValoresItemStateChanged
         //Una vez Desmarcado el Valor Seleccionado
         if (evt.getStateChange() == java.awt.event.ItemEvent.DESELECTED){
-            //Cargamos los Valores Asociados a la Categoria Seleccionada
-            //cargaDatosValor(jCBValores.getSelectedIndex());
+            //Cargamos los Datos Asociados al Valor Seleccionado
+            cargaDatosValor();
         }
     }//GEN-LAST:event_jCBValoresItemStateChanged
 
     //Recupera los Valores de la Categoria Seleccionada
-    private List<Valor> getValoresCategoria(int posCategoria){
-        List<Valor> valores = new ArrayList(categorias.getCategoriaList().get(posCategoria).getValorCollection());
-        return valores;
+    private List<Valor> getValoresCategoria(){
+        //Posicion de la Categoria Seleccionada
+        int posIndCat = jCBCategorias.getSelectedIndex();
+        
+        //Retornamos la Lista de Valores de la Categoria Seleccionada
+        return (new ArrayList(categorias.getCategoriaList().get(posIndCat).getValorCollection()));
     }
+
     //Recupera el Valor Seleccionado de la Categoria Seleccionada
-    private Valor getValorCategoria(int posCategoria, int posValor){
-        List<Valor> valores = new ArrayList(categorias.getCategoriaList().get(posCategoria).getValorCollection());
-        return valores.get(posValor);
+    private Valor getValorCategoria(){
+        //Posicion de la Categoria Seleccionada
+        int posIndCat = jCBCategorias.getSelectedIndex();
+        
+        //Posicion del Valor Seleccionado
+        int posIndVal = jCBValores.getSelectedIndex();
+
+        //Recupera los Valores de la Categoria Seleccionada (Pasamos de un Collection a un List)
+        List<Valor> valores = new ArrayList(categorias.getCategoriaList().get(posIndCat).getValorCollection());
+        
+        //Retornamos de la Lista Solo el Valor Seleccionado
+        return valores.get(posIndVal);
+    }
+
+    //Recupera los Datos del Valor Seleccionado
+    private DatosValor getDatosValor(){
+        //Posicion de la Categoria Seleccionada
+        int posIndCat = jCBCategorias.getSelectedIndex();
+        
+        //Posicion del Valor Seleccionado
+        int posIndVal = jCBValores.getSelectedIndex();
+
+        //Recupera los Valores de la Categoria Seleccionada (Pasamos de un Collection a un List)
+        List<Valor> valores = new ArrayList(categorias.getCategoriaList().get(posIndCat).getValorCollection());
+        
+        //Recupera los Datos del Valor Seleccionado
+        DatosValor datosValor = new DatosValor();
+        datosValor.setDatoValorList(new ArrayList(valores.get(posIndVal).getDatoValorCollection()));
+
+        //Retornamos los Datos del Valor Seleccionado
+        return datosValor;
     }
 
     /**
@@ -290,6 +389,6 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableDatosValor;
     // End of variables declaration//GEN-END:variables
 }

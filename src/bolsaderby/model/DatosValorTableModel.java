@@ -19,15 +19,14 @@ public class DatosValorTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 6;
+        return 7;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         DatoValor datoValor = datosValor.getDatoValorList().get(rowIndex);
         switch(columnIndex) {
-            case 0:
-                
+            case 0:                
                 return datoValor.getApertura() + ", " + datoValor.getApertura() + ", " + datoValor.getDatoValorPK().getFecha().toString();
             default:
                 return null;
@@ -38,7 +37,7 @@ public class DatosValorTableModel extends AbstractTableModel {
     public String getColumnName(int column) {
         switch(column) {
             case 0:
-                return "Cod_Valor";
+                return "Valor";
             case 1:
                 return "Fecha";
             case 2:
