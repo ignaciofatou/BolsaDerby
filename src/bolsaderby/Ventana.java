@@ -8,7 +8,7 @@ package bolsaderby;
 import bolsaderby.data.Categoria;
 import bolsaderby.data.Categorias;
 import bolsaderby.data.Valor;
-import bolsaderby.data.Valores;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -22,8 +22,9 @@ public class Ventana extends javax.swing.JFrame {
 
     // Connection with database using an entity manager
     EntityManager entityManager = Persistence.createEntityManagerFactory("BolsaDerbyPU").createEntityManager();
-    Categorias    categorias = new Categorias();
-    Valores       valores    = new Valores();
+    Categorias  categorias;
+    List<Valor> valores;
+    Valor       valor;
     
     /**
      * Creates new form Ventana
@@ -40,37 +41,47 @@ public class Ventana extends javax.swing.JFrame {
         //Cargamos las Categorias en el ComboBox
         cargaCategorias();
     }
+    
 
+    //Solo se deben Cargar las Categorias al Iniciar el Programa
     private void cargaCategorias(){
-        List<Categoria> categoriaList = categorias.findAll(entityManager);
-
         //Reiniciamos el Combo si ya tiene algun contenido
         if (jCBCategorias.getItemCount() != 0)
             reiniciaCombo(jCBCategorias);
         
+        //Recuperamos todas las Categorias
+        categorias = new Categorias();
+        categorias.findAll(entityManager);
+        
         //Cargamos el ComboBox a Partir de las Descripciones de las Categorias
-        for (Categoria categoria:categoriaList){
+        for (Categoria categoria:categorias.getCategoriaList()){
             jCBCategorias.addItem(categoria.getDescripcion());
         }
         //Marcamos por defecto el Primero Item como Seleccionado
         jCBCategorias.setSelectedIndex(0);
+        
+        //Carga los Valores de la Categoria Seleccionada por defecto
+        cargaValoresCategoria(0);
     }
     
-    private void cargaValores(){
-        List<Valor> valorList = valores.findAll(entityManager);
+    //Carga todos los Valores de la Categoria Seleccionada
+    private void cargaValoresCategoria(int posIndCat){
+        //Recuperamos los Valores de la Categoria Seleccionada
+        valores = getValoresCategoria(posIndCat);
         
         //Reiniciamos el Combo si ya tiene algun contenido
         if (jCBValores.getItemCount() != 0)
             reiniciaCombo(jCBValores);
         
         //Cargamos el ComboBox a Partir de las Descripciones de las Categorias
-        for (Valor valor:valorList){
+        for (Valor valor:valores){
             jCBValores.addItem(valor.getDescripcion());
         }
         //Marcamos por defecto el Primero Item como Seleccionado
         jCBValores.setSelectedIndex(0);
     }
     
+    //Reinicia el Modelo del Combo
     private void reiniciaCombo(javax.swing.JComboBox combo){
         DefaultComboBoxModel modelo = new DefaultComboBoxModel();
         combo.setModel(modelo);
@@ -89,6 +100,11 @@ public class Ventana extends javax.swing.JFrame {
         jCBCategorias = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         jCBValores = new javax.swing.JComboBox();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -107,20 +123,79 @@ public class Ventana extends javax.swing.JFrame {
 
         jLabel2.setText("Valores:");
 
+        jCBValores.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCBValoresItemStateChanged(evt);
+            }
+        });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 167, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Históricos", jPanel1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCBCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCBValores, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCBCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCBValores, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -131,7 +206,9 @@ public class Ventana extends javax.swing.JFrame {
                     .addComponent(jCBCategorias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(jCBValores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(354, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
         );
 
         pack();
@@ -146,9 +223,28 @@ public class Ventana extends javax.swing.JFrame {
         //Una vez Desmarcado el Valor Seleccionado
         if (evt.getStateChange() == java.awt.event.ItemEvent.DESELECTED){
             //Cargamos los Valores Asociados a la Categoria Seleccionada
-            cargaValores();
+            cargaValoresCategoria(jCBCategorias.getSelectedIndex());
         }
     }//GEN-LAST:event_jCBCategoriasItemStateChanged
+
+    private void jCBValoresItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBValoresItemStateChanged
+        //Una vez Desmarcado el Valor Seleccionado
+        if (evt.getStateChange() == java.awt.event.ItemEvent.DESELECTED){
+            //Cargamos los Valores Asociados a la Categoria Seleccionada
+            //cargaDatosValor(jCBValores.getSelectedIndex());
+        }
+    }//GEN-LAST:event_jCBValoresItemStateChanged
+
+    //Recupera los Valores de la Categoria Seleccionada
+    private List<Valor> getValoresCategoria(int posCategoria){
+        List<Valor> valores = new ArrayList(categorias.getCategoriaList().get(posCategoria).getValorCollection());
+        return valores;
+    }
+    //Recupera el Valor Seleccionado de la Categoria Seleccionada
+    private Valor getValorCategoria(int posCategoria, int posValor){
+        List<Valor> valores = new ArrayList(categorias.getCategoriaList().get(posCategoria).getValorCollection());
+        return valores.get(posValor);
+    }
 
     /**
      * @param args the command line arguments
@@ -190,5 +286,10 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JComboBox jCBValores;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
