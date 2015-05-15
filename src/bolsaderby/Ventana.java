@@ -57,11 +57,11 @@ public class Ventana extends javax.swing.JFrame {
         cargaCategorias();
         
         //Inicializamos el JTable de Datos del Valor
-        initJTableDatosValor();
+        cargaJTableDatosValor();
     }
     
     // Set configuration and data content for students jTable
-    private void initJTableDatosValor() {
+    private void cargaJTableDatosValor() {
         // Model for JTable, assigning classgroups content
         datosValorTableModel = new DatosValorTableModel(datosValor);
         jTableDatosValor.setModel(datosValorTableModel);  
@@ -137,21 +137,23 @@ public class Ventana extends javax.swing.JFrame {
         datosValor = getDatosValor();
 
         //Reiniciamos el JTable si este ya tiene algun contenido
-        //if (jCBValores.getItemCount() != 0)
-        //    reiniciaCombo(jCBValores);
-        
-        //Cargamos el ComboBox a Partir de las Descripciones de las Categorias
-        //for (Valor valor:valores){
-        //    jCBValores.addItem(valor.getDescripcion());
-        //}
-        //Marcamos por defecto el Primero Item como Seleccionado
-        //jCBValores.setSelectedIndex(0);
+        cargaJTableDatosValor();
     }
     
     //Reinicia el Modelo del Combo
     private void reiniciaCombo(javax.swing.JComboBox combo){
         DefaultComboBoxModel modelo = new DefaultComboBoxModel();
         combo.setModel(modelo);
+    }
+    
+    //Actualiza los Datos de los Valores de la Web MegaBolsa
+    public void actualizaDatosMegaBolsa(){
+
+        //Obtenemos los Datos de los Valores de la Web de MegaBolsa
+        datosMegaBolsa = new MegaBolsa(con, urlDatosFichero, comodinFichero, extensionFichero, codCategoria);
+
+        //Actualizamos los Datos de los Valores de la Web de MegaBolsa (Tarea en Paralelo)
+        getDatosValores().start();
     }
 
     /**

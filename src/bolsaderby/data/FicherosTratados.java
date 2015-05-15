@@ -30,4 +30,11 @@ public class FicherosTratados {
         ficheroTratadoList = query.getResultList();
         return ficheroTratadoList;
     }
+    
+    public static boolean estaYaTratado(EntityManager entityManager, String ficheroActual) {
+        // Load data from database
+        Query query = entityManager.createNamedQuery("FicheroTratado.findByFichero");
+        query.setParameter("fichero", ficheroActual);
+        return (!query.getResultList().isEmpty());
+    }
 }
