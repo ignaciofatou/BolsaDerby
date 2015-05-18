@@ -10,6 +10,7 @@ import bolsaderby.data.Categorias;
 import bolsaderby.data.DatoValor;
 import bolsaderby.data.DatosValor;
 import bolsaderby.data.Valor;
+import bolsaderby.megabolsa.MegaBolsa;
 import bolsaderby.model.DatosValorTableModel;
 import bolsaderby.resources.BolsaValues;
 import java.util.ArrayList;
@@ -29,13 +30,18 @@ public class Ventana extends javax.swing.JFrame {
 
     // Connection with database using an entity manager
     EntityManager   entityManager = Persistence.createEntityManagerFactory("BolsaDerbyPU").createEntityManager();
-    Categorias      categorias;
-    List<Valor>     valores;
-    Valor           valor;
-    DatosValor      datosValor;          
-    
+
+    //Para el Modelo del JTable de los Datos del Valor
     private DatosValorTableModel datosValorTableModel;
-    private DatoValor            datoValorSelected;
+
+    //Estructuras de Datos
+    Categorias  categorias;
+    Categoria   categoria;
+    List<Valor> valores;
+    Valor       valor;
+    DatosValor  datosValor;
+    DatoValor   datoValor;
+    MegaBolsa   datosMegaBolsa;
     
     /**
      * Creates new form Ventana
@@ -58,6 +64,9 @@ public class Ventana extends javax.swing.JFrame {
         
         //Inicializamos el JTable de Datos del Valor
         cargaJTableDatosValor();
+        
+        //Carga los Datos de MegaBolsa en Segundo Plano
+        actualizaDatosMegaBolsa();
     }
     
     // Set configuration and data content for students jTable
@@ -70,13 +79,12 @@ public class Ventana extends javax.swing.JFrame {
         jTableDatosValor.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         // Listen for student selection in jtable
-        jTableDatosValor.getSelectionModel().addListSelectionListener(
-            new ListSelectionListener() {
+        jTableDatosValor.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
                 @Override
                 public void valueChanged(ListSelectionEvent event) {
                     int indexSelectedRow = jTableDatosValor.getSelectedRow();
                     if(indexSelectedRow >= 0) {
-                        datoValorSelected = datosValor.getDatoValorList().get(indexSelectedRow);
+                        datoValor = datosValor.getDatoValorList().get(indexSelectedRow);
                         //showDetailStudentSelected();
                     } else {
                         //jTextFieldName.setText("");
@@ -113,6 +121,9 @@ public class Ventana extends javax.swing.JFrame {
     
     //Carga todos los Valores de la Categoria Seleccionada
     private void cargaValoresCategoria(){
+        //Guardamos la Categoria Seleccionada
+        categoria = getCategoria();
+
         //Recuperamos los Valores de la Categoria Seleccionada
         valores = getValoresCategoria();
         
@@ -132,7 +143,10 @@ public class Ventana extends javax.swing.JFrame {
     }
 
     //Carga los Datos del Valor Seleccionado
-    private void cargaDatosValor(){        
+    private void cargaDatosValor(){
+        //Guarda el Valor Seleccionado
+        valor = getValorCategoria();
+        
         //Recuperamos los Datos del Valor Seleccionado
         datosValor = getDatosValor();
 
@@ -147,15 +161,16 @@ public class Ventana extends javax.swing.JFrame {
     }
     
     //Actualiza los Datos de los Valores de la Web MegaBolsa
-    public void actualizaDatosMegaBolsa(){
-
+    private void actualizaDatosMegaBolsa(){
         //Obtenemos los Datos de los Valores de la Web de MegaBolsa
-        datosMegaBolsa = new MegaBolsa(con, urlDatosFichero, comodinFichero, extensionFichero, codCategoria);
-
+        datosMegaBolsa = new MegaBolsa(entityManager, categoria.getUrl(), categoria.getComodin(), categoria.getExtension(), categoria.getCodCat());
+        
         //Actualizamos los Datos de los Valores de la Web de MegaBolsa (Tarea en Paralelo)
-        getDatosValores().start();
+        datosMegaBolsa.start();
     }
 
+
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -304,6 +319,15 @@ public class Ventana extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jCBValoresItemStateChanged
 
+    
+    private Categoria getCategoria(){
+        //Posicion de la Categoria Seleccionada
+        int posIndCat = jCBCategorias.getSelectedIndex();
+        
+        //Retornamos la Categoria Seleccionada
+        return categorias.getCategoriaList().get(posIndCat);
+    }
+    
     //Recupera los Valores de la Categoria Seleccionada
     private List<Valor> getValoresCategoria(){
         //Posicion de la Categoria Seleccionada

@@ -82,10 +82,10 @@ public class MegaBolsa extends Thread{
                 //Recorremos el Fichero de la URL hasta el Final
                 while ((lineaLeida = buffer.readLine()) != null){
                     //Por Cada Linea Creamos un Nuevo Dato Valor
-                    datoValor = new DatoValor(patronesCampos, lineaLeida, categoria);                
+                    datoValor = new DatoValor(patronesCampos, lineaLeida);                
 
-                    //Añadimos el Nuevo Dato del Valor al List
-                    datoDiaValores.setNuevoValor(datoValor);
+                    //Añadimos el Nuevo Dato del Valor a la Base de Datos
+                    insertaDatoValorBBDD(datoValor);
                 }
                 //Cerramos el Buffer
                 buffer.close();
@@ -94,16 +94,25 @@ public class MegaBolsa extends Thread{
                 //Suele dar este error con los Fines de Semana que no hay Datos para la Bolsa
                 System.out.println("Error al Acceder al Fichero: " + e.getMessage());
             }
-            //Insertamos los Datos de los Valores en BBDD
-            datoDiaValores.insertaDatoValoresBBDD(con);
-
             //Insertamos el Fichero Tratado (Para no volver a tratarlo)
             FicheroTratado fichTratado = new FicheroTratado(direccionInformacion, datoDiaValores.getDatoDiaValores().size());
-            fichTratado.insertFicheroBBDD(con);
+            insertaFicheroTratadoBBDD(fichTratado);
             System.out.println("El Fichero Ha Sido Tratado Con Exito: "+direccionInformacion);
         }
         //else
         //    System.out.println("El Fichero Ya Fue Tratado: "+direccionInformacion);
+    }
+    
+    private void insertaDatoValorBBDD(DatoValor datoValor){
+        entityManager.getTransaction().begin(); 
+        entityManager.persist(datoValor); 
+        entityManager.getTransaction().commit();
+    }
+    
+    private void insertaFicheroTratadoBBDD(FicheroTratado ficheroTratado){
+        entityManager.getTransaction().begin(); 
+        entityManager.persist(ficheroTratado); 
+        entityManager.getTransaction().commit();
     }
     
     //Actualiza los Datos de los Valores el Numero de dias Indicado en NUM_DIAS
