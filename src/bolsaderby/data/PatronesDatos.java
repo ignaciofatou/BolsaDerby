@@ -26,7 +26,7 @@ public class PatronesDatos {
     
     public List<PatronDato> findAll(EntityManager entityManager) {
         // Load data from database
-        Query query = entityManager.createNamedQuery("PatronDatos.findAll");
+        Query query = entityManager.createNamedQuery("PatronDato.findAll");
         patronDatosList = query.getResultList();
         return patronDatosList;
     } 

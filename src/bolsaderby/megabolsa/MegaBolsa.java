@@ -7,12 +7,14 @@ package bolsaderby.megabolsa;
 
 import bolsaderby.librerias.Fecha;
 import bolsaderby.data.DatoValor;
+import bolsaderby.data.DatoValorPK;
 import bolsaderby.data.FicheroTratado;
 import bolsaderby.data.FicherosTratados;
 import bolsaderby.data.PatronDato;
 import bolsaderby.data.PatronesDatos;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,6 +43,15 @@ public class MegaBolsa extends Thread{
     //Constantes
     public final int NUM_DIAS = 300;
     
+    //Constantes para los Datos Extraidos
+    private final String COD_VALOR = "COD_VALOR";
+    private final String FECHA     = "FECHA";
+    private final String APERTURA  = "APERTURA";
+    private final String MAXIMO    = "MAXIMO";
+    private final String MINIMO    = "MINIMO";
+    private final String CIERRE    = "CIERRE";
+    private final String VOLUMEN   = "VOLUMEN";
+    
     //Constructor
     public MegaBolsa(EntityManager entityManager, String direccionWEB, String comodinWEB, String extensionWEB, String categoria){
         //Asignamos la Conexion
@@ -48,7 +59,7 @@ public class MegaBolsa extends Thread{
 
         //Obtenemos los Patrones para Recuperar Ordenadamente los Campos de la Web
         PatronesDatos auxPatronesCampos = new PatronesDatos();
-        patronesCampos = auxPatronesCampos.findAll(null);
+        patronesCampos = auxPatronesCampos.findAll(entityManager);
         
         //Obtenemos el Resto de Datos para Generar la URL
         this.direccionWEB = direccionWEB;
@@ -82,10 +93,11 @@ public class MegaBolsa extends Thread{
                 //Recorremos el Fichero de la URL hasta el Final
                 while ((lineaLeida = buffer.readLine()) != null){
                     //Por Cada Linea Creamos un Nuevo Dato Valor
-                    datoValor = new DatoValor(patronesCampos, lineaLeida);                
+                    datoValor = getDatoValor(patronesCampos, lineaLeida);
 
                     //Añadimos el Nuevo Dato del Valor a la Base de Datos
-                    insertaDatoValorBBDD(datoValor);
+                    if (!insertaDatoValorBBDD(datoValor))
+                        System.out.println("No se pudo Insertar el Dato: " + datoValor.getDatoValorPK().getCodValor() + " - Fecha: " + datoValor.getDatoValorPK().getFecha().toString());
                 }
                 //Cerramos el Buffer
                 buffer.close();
@@ -103,16 +115,80 @@ public class MegaBolsa extends Thread{
         //    System.out.println("El Fichero Ya Fue Tratado: "+direccionInformacion);
     }
     
-    private void insertaDatoValorBBDD(DatoValor datoValor){
-        entityManager.getTransaction().begin(); 
-        entityManager.persist(datoValor); 
-        entityManager.getTransaction().commit();
+	//Construye a Partir de una Linea y del Patron
+    public DatoValor getDatoValor(List <PatronDato> patronesCampos, String linea){
+        //Para guardar los Datos del Valor
+        DatoValorPK datoValorPK = new DatoValorPK();
+        DatoValor   datoValor   = new DatoValor();
+        
+        //A partir de la Linea guardamos los Datos en un List de Campos
+        CamposLinea camposLinea = new CamposLinea(linea, ",");
+
+        //Recorremos el List de Patrones
+        for(PatronDato patronDato:patronesCampos){
+            
+            //Recuperamos el Campo especificado en la Posicion del Patron
+            int posicion = patronDato.getOrden();
+            CampoLinea campoLinea = camposLinea.getCamposLinea().get(posicion - 1);
+            String contenido = campoLinea.getContenido();
+            
+            switch(patronDato.getCodCampo()){
+                case COD_VALOR:
+                    datoValorPK.setCodValor(contenido);
+                    break;
+                case FECHA:
+                    Date fecha = Fecha.getFechaDate(contenido, Fecha.YYYYMMDD);
+                    datoValorPK.setFecha(fecha);
+                    break;
+                case APERTURA:
+                    datoValor.setApertura(BigDecimal.valueOf(Double.valueOf(contenido)));
+                    break;
+                case MAXIMO:
+                    datoValor.setMaximo(BigDecimal.valueOf(Double.valueOf(contenido)));
+                    break;
+                case MINIMO:
+                    datoValor.setMinimo(BigDecimal.valueOf(Double.valueOf(contenido)));
+                    break;
+                case CIERRE:
+                    datoValor.setCierre(BigDecimal.valueOf(Double.valueOf(contenido)));
+                    break;
+                case VOLUMEN:
+                    datoValor.setVolumen(Long.valueOf(contenido));
+                    break;
+            }
+        }
+        //Guardamos la Primary Key
+        datoValor.setDatoValorPK(datoValorPK);
+        
+        //Retornamos el DatoValor
+        return datoValor;
     }
     
-    private void insertaFicheroTratadoBBDD(FicheroTratado ficheroTratado){
-        entityManager.getTransaction().begin(); 
-        entityManager.persist(ficheroTratado); 
-        entityManager.getTransaction().commit();
+    
+    private boolean insertaDatoValorBBDD(DatoValor datoValor){
+        try{
+            entityManager.getTransaction().begin(); 
+            entityManager.persist(datoValor); 
+            entityManager.getTransaction().commit();
+            return true;
+        }catch (Exception ex){
+            System.out.println("Error al Insertar en la Tabla DATOS_VALORES");
+            System.out.println(ex.toString());
+            return false;
+        }
+    }
+    
+    private boolean insertaFicheroTratadoBBDD(FicheroTratado ficheroTratado){
+        try{
+            entityManager.getTransaction().begin(); 
+            entityManager.persist(ficheroTratado); 
+            entityManager.getTransaction().commit();
+            return true;
+        }catch (Exception ex){
+            System.out.println("Error al Insertar en la Tabla FICHERO_TRATADO");
+            System.out.println(ex.toString());
+            return false;
+        }
     }
     
     //Actualiza los Datos de los Valores el Numero de dias Indicado en NUM_DIAS

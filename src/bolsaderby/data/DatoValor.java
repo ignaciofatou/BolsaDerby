@@ -5,13 +5,9 @@
  */
 package bolsaderby.data;
 
-import bolsaderby.librerias.Fecha;
-import bolsaderby.megabolsa.CampoLinea;
-import bolsaderby.megabolsa.CamposLinea;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -40,16 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "DatoValor.findByCierre", query = "SELECT d FROM DatoValor d WHERE d.cierre = :cierre"),
     @NamedQuery(name = "DatoValor.findByVolumen", query = "SELECT d FROM DatoValor d WHERE d.volumen = :volumen")})
 public class DatoValor implements Serializable {
-    
-    //Constantes
-    private final String COD_VALOR = "COD_VALOR";
-    private final String FECHA     = "FECHA";
-    private final String APERTURA  = "APERTURA";
-    private final String MAXIMO    = "MAXIMO";
-    private final String MINIMO    = "MINIMO";
-    private final String CIERRE    = "CIERRE";
-    private final String VOLUMEN   = "VOLUMEN";
-    
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected DatoValorPK datoValorPK;
@@ -87,50 +74,7 @@ public class DatoValor implements Serializable {
         this.volumen = volumen;
     }
 
-    //Construye a Partir de una Linea y del Patron
-    public DatoValor(List <PatronDato> patronesCampos, String linea){
-        //Para la primary key
-        DatoValorPK datoValorPK = new DatoValorPK();
-        
-        //A partir de la Linea guardamos los Datos en un List de Campos
-        CamposLinea camposLinea = new CamposLinea(linea, ",");
 
-        //Recorremos el List de Patrones
-        for(PatronDato patronDato:patronesCampos){
-            
-            //Recuperamos el Campo especificado en la Posicion del Patron
-            int posicion = patronDato.getOrden();
-            CampoLinea campoLinea = camposLinea.getCamposLinea().get(posicion - 1);
-            String contenido = campoLinea.getContenido();
-            
-            switch(patronDato.getCodCampo()){
-                case COD_VALOR:
-                    datoValorPK.setCodValor(contenido);
-                    break;
-                case FECHA:
-                    Date fecha = Fecha.getFechaDate(contenido, Fecha.YYYYMMDD);
-                    datoValorPK.setFecha(fecha);
-                    break;
-                case APERTURA:
-                    this.apertura = BigDecimal.valueOf(Double.valueOf(contenido));
-                    break;
-                case MAXIMO:
-                    this.maximo = BigDecimal.valueOf(Double.valueOf(contenido));
-                    break;
-                case MINIMO:
-                    this.minimo = BigDecimal.valueOf(Double.valueOf(contenido));
-                    break;
-                case CIERRE:
-                    this.cierre = BigDecimal.valueOf(Double.valueOf(contenido));
-                    break;
-                case VOLUMEN:
-                    this.volumen = Long.valueOf(contenido);
-                    break;
-            }
-        }
-        //Guardamos la Primary Key
-        this.datoValorPK = datoValorPK;
-    }
     
     public DatoValor(String codValor, Date fecha) {
         this.datoValorPK = new DatoValorPK(codValor, fecha);
